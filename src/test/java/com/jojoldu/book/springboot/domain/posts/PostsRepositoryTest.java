@@ -1,5 +1,6 @@
 package com.jojoldu.book.springboot.domain.posts;
 
+import jdk.vm.ci.meta.Local;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -9,9 +10,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -52,5 +55,29 @@ public class PostsRepositoryTest {
         Posts posts = postsList.get(0);
         assertEquals(posts.getTitle() , title);
         assertEquals(posts.getContent() , content);
+    }
+
+    @Test
+    public void BaseTimeEntity_등록() {
+
+        // given
+        LocalDateTime now = LocalDateTime.of(2019,12,7,7,24);
+        postsRepository.save(Posts.builder()
+                .title("타이틀")
+                .content("마이러브")
+                .author("정경화")
+                .build());
+
+        // when
+        List<Posts> all = postsRepository.findAll();
+
+        // then
+        Posts posts = all.get(0);
+
+        System.out.println(">>>>>>>>>>>>>>>> createDate="+posts.getCreateDate()
+        +", modifiedDate="+posts.getModifiedDate());
+
+        assertThat(posts.getCreateDate()).isAfter(now);
+        assertThat(posts.getModifiedDate()).isAfter(now);
     }
 }
