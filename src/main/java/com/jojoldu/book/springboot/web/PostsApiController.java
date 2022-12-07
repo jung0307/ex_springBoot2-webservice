@@ -21,6 +21,7 @@ public class PostsApiController {
     @PutMapping(value = "/api/v1/posts/{id}")
     public Long update(@PathVariable("id") Long id , @RequestBody
     PostsUpdateRequestDto requestDto) {
+        System.out.println("여기 오긴 할까?~~~~~~~~~~~~~~~~~~~");
         return postsService.update(id, requestDto);
     }
 
@@ -28,5 +29,13 @@ public class PostsApiController {
     public PostsResponseDto findById (@PathVariable("id") Long id) {
 
         return postsService.findById(id);
+    }
+
+    @DeleteMapping(value = "/api/v1/posts/{id}")
+    public Long delete(@PathVariable("id") Long id) {
+
+         postsService.delete(id);
+
+         return id;
     }
 }
